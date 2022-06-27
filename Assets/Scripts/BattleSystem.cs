@@ -1,26 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-//using System.Linq;        // wtf is this?
+//using System.Linq;        // wtf is this? Was included with iteration through children code...
+using Priority_Queue;
 
-public enum BattleState {START, PLAYERTURN, ENEMYTURN, WON, LOST}
+public enum BattleState {START, PLAYERTURN, TARGET, ENEMYTURN, WON, LOST}
 
 public class BattleSystem : MonoBehaviour
 {
     public BattleState state;
     public GameObject battleStations;
 
-    // Set up the objects to load. TODO how do we save and retrieve these?
-    public GameObject playerPrefab;
-    public GameObject enemyPrefab;
-
-    // TODO might need 1 for each of the 18 spots...
-    // TODO attacks affiliated with spots then?
-    public Transform playerBattleStation;
-    public Transform enemyBattleStation;
-
-    Unit playerUnit;
-    Unit enemyUnit;
 
     // Start is called before the first frame update
     void Start()
@@ -36,28 +26,38 @@ public class BattleSystem : MonoBehaviour
         // For every tile, spawn its occupant
         foreach (Transform tile in battleStations.transform)
         {
-            BattleTile curr = tile.gameObject.GetComponent<BattleTile>();
-            if (curr.occupiedBy == null)
+
+            BattleTile currTile = tile.gameObject.GetComponent<BattleTile>();
+            if (currTile.occupiedBy == null)
                 continue;
             // maybe add animation here?
-            Instantiate(curr.occupiedBy, tile);
+            Unit currUnit = currTile.occupiedBy;
+            Instantiate(currUnit, currTile.transform);
+            // Add to turn order
         }
         yield return new WaitForSeconds(2f);
-
-        /*
-        // Put everyone in the right spot. How do we save ally positions?
-        // Enemy positions?
-        GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
-        playerUnit = playerGO.GetComponent<Unit>();
-
-        GameObject enemyGO = Instantiate(enemyPrefab, enemyBattleStation);
-        enemyUnit = enemyGO.GetComponent<Unit>();
-
-        yield return new WaitForSeconds(2f);
-
-        state = BattleState.PLAYERTURN; // TODO turn management goes here probably
-        PlayerTurn();                   // TODO also will be different depending on turn management*/
     }
+
+    void TurnManager()
+    {
+        // 
+    }
+}
+
+
+/*
+    // Set up the objects to load. TODO how do we save and retrieve these?
+    public GameObject playerPrefab;
+    public GameObject enemyPrefab;
+
+    // TODO might need 1 for each of the 18 spots...
+    // TODO attacks affiliated with spots then?
+    public Transform playerBattleStation;
+    public Transform enemyBattleStation;
+
+    Unit playerUnit;
+    Unit enemyUnit;
+
 
     IEnumerator PlayerAttack()
     {
@@ -82,4 +82,4 @@ public class BattleSystem : MonoBehaviour
         StartCoroutine(PlayerAttack());
     }
 
-}
+*/

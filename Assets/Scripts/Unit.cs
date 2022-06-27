@@ -6,6 +6,7 @@ public class Unit : MonoBehaviour
 {
     public string unitName;
     public int unitLevel;
+    public enum affl {ALLY, ENEMY}
 
     public int atk;
     public int spd;
