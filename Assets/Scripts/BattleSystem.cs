@@ -4,7 +4,7 @@ using UnityEngine;
 //using System.Linq;        // wtf is this? Was included with iteration through children code...
 using Priority_Queue;
 
-public enum BattleState {START, PLAYERTURN, TARGET, ENEMYTURN, WON, LOST}
+public enum BattleState {START, TARGET, PLAYERTURN, ENEMYTURN, ENDTURN, WON, LOST};
 
 public class BattleSystem : MonoBehaviour
 {
@@ -26,7 +26,6 @@ public class BattleSystem : MonoBehaviour
         // For every tile, spawn its occupant
         foreach (Transform tile in battleStations.transform)
         {
-
             BattleTile currTile = tile.gameObject.GetComponent<BattleTile>();
             if (currTile.occupiedBy == null)
                 continue;
