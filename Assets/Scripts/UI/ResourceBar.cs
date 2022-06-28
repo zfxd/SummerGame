@@ -6,7 +6,6 @@ using UnityEngine.UI;
 public class ResourceBar : MonoBehaviour
 {
     public Slider fill;
-    public Color color;
 
     public resource resourceType;
     public Dictionary<resource, Color> resourceColor = new Dictionary<resource, Color>()
@@ -20,8 +19,7 @@ public class ResourceBar : MonoBehaviour
     public void SetType(resource type)
     {
         resourceType = type;
-        color = resourceColor[resourceType];
-        fill.GetComponent<Image>().color = color;
+        fill.GetComponent<Image>().color = resourceColor[resourceType];
     }
 
     public void SetMax(float max)

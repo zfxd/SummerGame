@@ -7,10 +7,6 @@ public enum resource {Life, Mana, Rage, Ammo};
 
 public class Unit : MonoBehaviour
 {
-    // UI
-    public ResourceBar unitLifeBar;
-    public ResourceBar unitResourceBar;
-
     // Characteristics
     public string   unitName;
     public int      unitLevel;
