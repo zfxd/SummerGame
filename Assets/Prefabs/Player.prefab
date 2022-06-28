@@ -118,11 +118,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a5b55aadaf4c82645a3c155e3fb16cfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  unitLifeBar: {fileID: 0}
-  unitResourceBar: {fileID: 0}
+  unitBars: {fileID: 0}
   unitName: Player
   unitLevel: 1
   unitAffl: 0
+  unitPortrait: {fileID: 0}
   unitAtk:
     baseValue: 100
   unitDef:
@@ -132,7 +132,7 @@ MonoBehaviour:
   unitLifeMax:
     baseValue: 100
   unitLife: 100
-  unitResourceType: 0
+  unitResourceType: 1
   unitResourceMax:
     baseValue: 100
   unitResource: 100

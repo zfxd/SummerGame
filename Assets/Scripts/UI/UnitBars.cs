@@ -6,8 +6,21 @@ using UnityEngine.UI;
 public class UnitBars : MonoBehaviour
 {
     public Unit ownedBy;
+
+    public Portrait unitPortrait;
+    public Sprite unitPortraitSprite;
+
     public ResourceBar unitLifeBar;
+    public Color unitLifeBarColor;
     public ResourceBar unitResourceBar;
+    public Color unitResourceBarColor;
+    public Dictionary<resource, Color> resourceColor = new Dictionary<resource, Color>()
+        {
+            {resource.Life, Color.red},
+            {resource.Mana, Color.blue},
+            {resource.Rage, new Color(1.0f, 0.4f, 0.0f)}, // Orange
+            {resource.Ammo, Color.yellow}
+        };
 
     void Start()
     {
@@ -16,18 +29,24 @@ public class UnitBars : MonoBehaviour
 
     void Init()
     {
-        unitLifeBar.SetType(resource.Life);
-        unitResourceBar.SetType(ownedBy.unitResourceType);
+        //unitPortrait.SetPortrait(ownedBy.unitPortrait);
+
+        unitLifeBarColor = Color.red;
+        unitLifeBar.SetBarColor(unitLifeBarColor);
+
+        unitResourceBarColor = resourceColor[ownedBy.unitResourceType];
+        unitResourceBar.SetBarColor(unitResourceBarColor);
+
         UpdateUnitBars();
     }
 
-    void ChangeOwner(Unit newOwner)
+    public void ChangeOwner(Unit newOwner) 
     {
         ownedBy = newOwner;
         Init();
     }
 
-    void UpdateUnitBars()
+    public void UpdateUnitBars()
     {
         unitLifeBar.SetMax(ownedBy.unitLifeMax.value);
         unitLifeBar.SetFill(ownedBy.unitLife);
@@ -35,6 +54,4 @@ public class UnitBars : MonoBehaviour
         unitResourceBar.SetMax(ownedBy.unitResourceMax.value);
         unitResourceBar.SetFill(ownedBy.unitResource);
     }
-
-
 }

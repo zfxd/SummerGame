@@ -163,7 +163,7 @@ MonoBehaviour:
   m_MinValue: 0
   m_MaxValue: 100
   m_WholeNumbers: 1
-  m_Value: 41
+  m_Value: 100
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -179,8 +179,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 452d104f009e35b4ca8daa9258c06fb9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ownedBy: {fileID: 0}
-  fill: {fileID: 6648980639127419646}
+  slider: {fileID: 6648980639127419646}
+  fill: {fileID: 6648980639267528063}
 --- !u!1 &6648980639267528061
 GameObject:
   m_ObjectHideFlags: 0
@@ -216,8 +216,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 44.102, y: 0}
-  m_SizeDelta: {x: 88.205, y: 0}
+  m_AnchoredPosition: {x: -0.00022888184, y: 0}
+  m_SizeDelta: {x: 0.0005188, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6648980639267528056
 CanvasRenderer:

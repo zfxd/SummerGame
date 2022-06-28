@@ -10,7 +10,10 @@ public class BattleSystem : MonoBehaviour
 {
     public BattleState state;
     public GameObject battleStations;
+    public PartyStatusDisplay partyDisplay;
 
+    public List<Unit> playerUnits;
+    public List<Unit> enemyUnits;
 
     // Start is called before the first frame update
     void Start()
@@ -31,9 +34,19 @@ public class BattleSystem : MonoBehaviour
                 continue;
             // maybe add animation here?
             Unit currUnit = currTile.occupiedBy;
-            Instantiate(currUnit, currTile.transform);
+            Unit tempUnit = Instantiate(currUnit, currTile.transform);
+            if (tempUnit.unitAffl == affl.ALLY)
+                playerUnits.Add(tempUnit);
+            else
+                enemyUnits.Add(tempUnit);
             // Add to turn order
         }
+
+        for (int i = 0; i < playerUnits.Count; i++)
+        {
+            partyDisplay.unitBars[i].ChangeOwner(playerUnits[i]);
+        }
+        
         yield return new WaitForSeconds(2f);
     }
 
