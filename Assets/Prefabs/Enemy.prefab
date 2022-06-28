@@ -128,7 +128,7 @@ MonoBehaviour:
   unitDef:
     baseValue: 100
   unitSpd:
-    baseValue: 100
+    baseValue: 90
   unitLifeMax:
     baseValue: 100
   unitLife: 100
