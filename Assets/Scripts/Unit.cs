@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum affl {ALLY, ENEMY};
-public enum resource {MANA, RAGE};
+public enum resource {Life, Mana, Rage, Ammo};
 
 public class Unit : MonoBehaviour
 {
@@ -41,21 +41,17 @@ public class Unit : MonoBehaviour
         unitSpd = new UnitStat(100);
         unitLifeMax = new UnitStat(100);
         unitLife = unitLifeMax.value;
-        unitResourceType = resource.MANA;
+        unitResourceType = resource.Mana;
         unitResourceMax = new UnitStat(100);
         unitResource = unitResourceMax.value;
         unitArmor = 0;
         unitShield = 0;
-
-        unitLifeBar.SetMax(unitLifeMax.value);
-        unitResourceBar.SetMax(unitResourceMax.value);
     }
 
     // Flat Damage or final result of %-based Damage
     public void TakeDamage(int dmg)
     {
         unitLife -= dmg;
-        unitLifeBar.SetFill(unitLife);
         Debug.Log(unitName + " took " + dmg + " Damage");
     }
 }
