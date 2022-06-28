@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7388103780626394480}
   - component: {fileID: 8249069448292939728}
   m_Layer: 0
-  m_Name: Player
+  m_Name: Player 3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -132,9 +132,9 @@ MonoBehaviour:
   unitLifeMax:
     baseValue: 100
   unitLife: 100
-  unitResourceType: 2
+  unitResourceType: 3
   unitResourceMax:
     baseValue: 100
-  unitResource: 100
+  unitResource: 25
   unitArmor: 0
   unitShield: 0
