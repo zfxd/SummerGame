@@ -7,6 +7,10 @@ public enum resource {MANA, RAGE};
 
 public class Unit : MonoBehaviour
 {
+    // UI
+    public ResourceBar unitLifeBar;
+    public ResourceBar unitResourceBar;
+
     // Characteristics
     public string   unitName;
     public int      unitLevel;
@@ -42,12 +46,16 @@ public class Unit : MonoBehaviour
         unitResource = unitResourceMax.value;
         unitArmor = 0;
         unitShield = 0;
+
+        unitLifeBar.SetMax(unitLifeMax.value);
+        unitResourceBar.SetMax(unitResourceMax.value);
     }
 
     // Flat Damage or final result of %-based Damage
     public void TakeDamage(int dmg)
     {
         unitLife -= dmg;
+        unitLifeBar.SetFill(unitLife);
         Debug.Log(unitName + " took " + dmg + " Damage");
     }
 }
