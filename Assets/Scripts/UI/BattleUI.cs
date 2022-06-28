@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class PartyStatusDisplay : MonoBehaviour
+public class BattleUI : MonoBehaviour
 {
-    public UnitBars[] unitBars = new UnitBars[4];
+    public PartyStatusDisplay partyDisplay;
 
 }

@@ -132,7 +132,7 @@ MonoBehaviour:
   unitLifeMax:
     baseValue: 100
   unitLife: 100
-  unitResourceType: 1
+  unitResourceType: 3
   unitResourceMax:
     baseValue: 100
   unitResource: 100

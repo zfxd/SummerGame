@@ -10,7 +10,7 @@ public class BattleManager : MonoBehaviour
 {
     public BattleState state;
     public GameObject battleStations;
-    public PartyStatusDisplay partyDisplay;
+    public BattleUI battleUI;
 
     public List<Unit> playerUnits;
     public List<Unit> enemyUnits;
@@ -46,10 +46,11 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Count " + turnOrder.Count);
         }
 
-//        for (int i = 0; i < playerUnits.Count; i++)
-//        {
-//            partyDisplay.unitBars[i].ChangeOwner(playerUnits[i]);
-//        }
+        for (int i = 0; i < playerUnits.Count; i++)
+        {
+            battleUI.partyDisplay.unitBars[i].ChangeOwner(playerUnits[i]);
+            battleUI.partyDisplay.unitBars[i].Enable();
+        }
         
         yield return new WaitForSeconds(2f);
         TurnManager();

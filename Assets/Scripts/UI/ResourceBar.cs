@@ -8,9 +8,9 @@ public class ResourceBar : MonoBehaviour
     public Slider slider;
     public Image fill;
 
-    public void SetBarColor(Color newColor)
+    public void SetType(resource type)
     {
-        fill.color = newColor;
+        fill.color = UITheme.resourceColor[type];
     }
 
     public void SetMax(float max)

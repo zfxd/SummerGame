@@ -6,51 +6,71 @@ using UnityEngine.UI;
 public class UnitBars : MonoBehaviour
 {
     public Unit ownedBy;
+    public bool isEnabled;
+    public Canvas canvas;
 
     public Portrait unitPortrait;
-    public Sprite unitPortraitSprite;
 
     public ResourceBar unitLifeBar;
-    public Color unitLifeBarColor;
     public ResourceBar unitResourceBar;
-    public Color unitResourceBarColor;
-    public Dictionary<resource, Color> resourceColor = new Dictionary<resource, Color>()
-        {
-            {resource.Life, Color.red},
-            {resource.Mana, Color.blue},
-            {resource.Rage, new Color(1.0f, 0.4f, 0.0f)}, // Orange
-            {resource.Ammo, Color.yellow}
-        };
-
+    
     void Start()
     {
-        Init();
-    }
-
-    void Init()
-    {
-        //unitPortrait.SetPortrait(ownedBy.unitPortrait);
-
-        unitLifeBarColor = Color.red;
-        unitLifeBar.SetBarColor(unitLifeBarColor);
-
-        unitResourceBarColor = resourceColor[ownedBy.unitResourceType];
-        unitResourceBar.SetBarColor(unitResourceBarColor);
-
-        UpdateUnitBars();
+        ownedBy = null;
+        UpdateAll();
     }
 
     public void ChangeOwner(Unit newOwner) 
     {
         ownedBy = newOwner;
-        Init();
+        UpdateAll();
+    }
+
+    public void Enable()
+    {
+        isEnabled = true;
+        canvas.enabled = isEnabled;
+        UpdateAll();
+    }
+
+    public void Disable()
+    {
+        enabled = false;
+        canvas.enabled = isEnabled;
+        ClearAll();
+    }
+
+    public void UpdateAll()
+    {
+        if (ownedBy == null)
+        {
+            Disable();
+        }
+        else
+        {
+            // UpdateUnitPortrait();
+            UpdateUnitBars();
+        }
+    }
+
+    public void ClearAll()
+    {
+        unitLifeBar.SetType(resource.None);
+        unitResourceBar.SetType(resource.None);
+    }
+
+    public void UpdateUnitPortrait()
+    {
+        unitPortrait.SetPortrait(ownedBy.unitPortrait);
     }
 
     public void UpdateUnitBars()
     {
+        unitLifeBar.SetType(resource.Life);
         unitLifeBar.SetMax(ownedBy.unitLifeMax.value);
         unitLifeBar.SetFill(ownedBy.unitLife);
 
+        unitResourceBar.SetType(ownedBy.unitResourceType);
         unitResourceBar.SetMax(ownedBy.unitResourceMax.value);
         unitResourceBar.SetFill(ownedBy.unitResource);
     }

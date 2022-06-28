@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public enum affl {ALLY, ENEMY};
-public enum resource {Life, Mana, Rage, Ammo};
+public enum resource {None, Life, Mana, Rage, Ammo};
 
 public class Unit : MonoBehaviour
 {

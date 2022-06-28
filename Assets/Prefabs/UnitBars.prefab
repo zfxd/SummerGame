@@ -143,12 +143,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ownedBy: {fileID: 0}
+  isEnabled: 0
+  canvas: {fileID: 1423924462953736153}
   unitPortrait: {fileID: 8424149009258829143}
-  unitPortraitSprite: {fileID: 0}
   unitLifeBar: {fileID: 6823145875582758532}
-  unitLifeBarColor: {r: 0, g: 0, b: 0, a: 0}
   unitResourceBar: {fileID: 2357233279971665462}
-  unitResourceBarColor: {r: 0, g: 0, b: 0, a: 0}
 --- !u!223 &1423924462953736153
 Canvas:
   m_ObjectHideFlags: 0
