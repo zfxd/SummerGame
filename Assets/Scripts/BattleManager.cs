@@ -12,7 +12,7 @@ public class BattleManager : MonoBehaviour
     public GameObject battleStations;
     public BattleUI battleUI;
 
-    public List<Unit> playerUnits;
+    public List<Unit> allyUnits;
     public List<Unit> enemyUnits;
     int temp = 10; // For now it runs for 10 turns because I don't want to stick Unity into an infinite loop
 
@@ -38,7 +38,7 @@ public class BattleManager : MonoBehaviour
             // maybe add animation here?
             Unit currUnit = Instantiate(currTile.occupiedBy, currTile.transform);
             if (currUnit.unitAffl == affl.ALLY)
-                playerUnits.Add(currUnit);
+                allyUnits.Add(currUnit);
             else
                 enemyUnits.Add(currUnit);
             // Add to turn order\
@@ -46,12 +46,9 @@ public class BattleManager : MonoBehaviour
             Debug.Log("Count " + turnOrder.Count);
         }
 
-        for (int i = 0; i < playerUnits.Count; i++)
-        {
-            battleUI.partyDisplay.unitBars[i].ChangeOwner(playerUnits[i]);
-            battleUI.partyDisplay.unitBars[i].Enable();
-        }
-        
+        // Initialize UI by giving it the list of units
+        battleUI.Init(allyUnits, enemyUnits);
+
         yield return new WaitForSeconds(2f);
         TurnManager();
     }

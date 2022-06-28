@@ -5,6 +5,10 @@ using UnityEngine.UI;
 
 public class BattleUI : MonoBehaviour
 {
-    public PartyStatusDisplay partyDisplay;
+    public PartyStatusDisplay partyStatusDisplay;
 
+    public void Init(List<Unit> allyUnits, List<Unit> enemyUnits)
+    {
+        partyStatusDisplay.Init(allyUnits, enemyUnits);
+    }
 }
