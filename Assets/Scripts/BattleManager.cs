@@ -3,12 +3,13 @@ using System.Collections.Generic;
 using UnityEngine;
 //using System.Linq;        // wtf is this? Was included with iteration through children code...
 using Priority_Queue;
+using Combat;
 
 public enum BattleState {START, TARGET, PLAYERTURN, ENEMYTURN, ENDTURN, WON, LOST}; // Not sure if the last 3 will be needed
 public enum Action {START, ATK, SKILL, MOVE, END};
 public enum SelectionMode {SINGLE, ROW, COLUMN, ALL};
 
-public class BattleManager : MonoBehaviour
+public class BattleManager : StateMachine
 {
     public BattleState state;
     public GameObject battleStations;
@@ -53,40 +54,7 @@ public class BattleManager : MonoBehaviour
         battleUI.Init(allyUnits, enemyUnits);
 
         yield return new WaitForSeconds(2f);
-        TurnManager();
-    }
-
-    void TurnManager()
-    {
-        Debug.Log("TurnManager begin");
-        // Check for win/losecon
-        
-        // Check if anyone is above threshold
-        while(turnOrder.GetPriority(turnOrder.First) < 1000)
-        {
-            // If no one, increment until someone is
-            foreach(Unit unit in turnOrder)
-            {
-                Debug.Log("No one yet");
-                turnOrder.UpdatePriority(unit, turnOrder.GetPriority(unit) + unit.unitSpd.value);
-            }
-        }
-
-        Unit currUnit = turnOrder.First;
-        // First move back to bottom of turnorder
-        turnOrder.UpdatePriority(currUnit, 0);
-        // Give them the turn
-        if (currUnit.unitAffl == affl.ALLY){
-            AllyTurn();
-        }
-        else{
-            EnemyTurn();
-        }
-
-        // hard 10 turn limit (move it to LoseCon area once ally and enemy turns are implemented)
-        temp--;
-        if (temp > 0)
-            TurnManager();
+        SetState(new TurnManager(this));
     }
 
     void AllyTurn()
