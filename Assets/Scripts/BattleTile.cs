@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// TODO: I'm 90% sure the targeting system isn't working correctly! Figure it out.
 public class BattleTile : MonoBehaviour
 {
     public Unit occupiedBy;
@@ -38,6 +39,7 @@ public class BattleTile : MonoBehaviour
         Debug.Log("Mouse has left " + this.name);
         // untarget
 
+
         // single untarget
         this.Untarget();
 
@@ -49,11 +51,8 @@ public class BattleTile : MonoBehaviour
         Debug.Log("Clicked " + this.name);
         // confirm target selection
         // ONLY AVAILABLE DURING TARGET MODE
-        if (battleManager.state == BattleState.TARGET)
-        {
-            return targeted;
-        }
-        return null;
+        return targeted;
+
     }
 
     void Target()

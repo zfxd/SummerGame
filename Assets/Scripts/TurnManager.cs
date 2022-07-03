@@ -20,7 +20,6 @@ namespace Combat
                 // If no one, increment until someone is
                 foreach(Unit unit in BattleManager.turnOrder)
                 {
-                    Debug.Log("No one yet");
                     BattleManager.turnOrder.UpdatePriority(unit, BattleManager.turnOrder.GetPriority(unit) + unit.unitSpd.value);
                 }
             }

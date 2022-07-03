@@ -5,20 +5,17 @@ using UnityEngine;
 using Priority_Queue;
 using Combat;
 
-public enum BattleState {START, TARGET, PLAYERTURN, ENEMYTURN, ENDTURN, WON, LOST}; // Not sure if the last 3 will be needed
 public enum Action {START, ATK, SKILL, MOVE, END};
-public enum SelectionMode {SINGLE, ROW, COLUMN, ALL};
+public enum SelectionMode {SINGLE, ROW, COLUMN, ALL};   // For AoE spells later maybe? Not currently used
 
 public class BattleManager : StateMachine
 {
-    public BattleState state;
     public GameObject battleStations;
     public BattleUI battleUI;
     public Action action;
 
     public List<Unit> allyUnits;
     public List<Unit> enemyUnits;
-    int temp = 10; // For now it runs for 10 turns because I don't want to stick Unity into an infinite loop
 
     public SimplePriorityQueue<Unit> turnOrder = new SimplePriorityQueue<Unit>(new ReverseComparer<float>());
 
@@ -26,7 +23,6 @@ public class BattleManager : StateMachine
     void Start()
     {
         Debug.Log("Start");
-        state = BattleState.START;
         StartCoroutine(SetupBattle());
     }
 
@@ -57,51 +53,10 @@ public class BattleManager : StateMachine
         SetState(new TurnManager(this));
     }
 
-    void AllyTurn()
-    {
-        state = BattleState.PLAYERTURN;
-        Debug.Log("Ally Turn");
-        action = Action.START;
-        // Do stuff
-        Debug.Log("Select an action");
-        // attack, skill, move, end
-        switch(action)
-        {
-            case Action.ATK:
-                Debug.Log("Attack");
-                break;
-            case Action.SKILL:
-                Debug.Log("Skill");
-                break;
-            case Action.MOVE:
-                Debug.Log("Move");
-                break;
-            case Action.END:
-                Debug.Log("End");
-                break;
-        }
-
-        // All done
-        // Automatically exits into turnmanager
-    }
-
-
-    void EnemyTurn() // Maybe coroutine for this as well? Might not need it though cause it doesnt need to wait for input
-    {
-        state = BattleState.ENEMYTURN;
-        // Enemy does jack shit till we get AI implemented
-        // Maybe test some attacks
-        Debug.Log("Enemy Turn");
-        // Do stuff
-
-        // All done
-        // Automatically exits into turnmanager
-    }
-
     public void SetAction(int set)
     {
-        if (state == BattleState.PLAYERTURN)
-            action = (Action) set;
+//        Debug.Log("Setting action");
+        action = (Action) set;
     }
 }
 
