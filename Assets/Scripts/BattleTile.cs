@@ -5,6 +5,8 @@ using UnityEngine;
 public class BattleTile : MonoBehaviour
 {
     public Unit occupiedBy;
+    public BattleManager battleManager;
+    HashSet<Unit> targeted = new HashSet<Unit>();
 
     // Start is called before the first frame update
     void Start()
@@ -42,24 +44,34 @@ public class BattleTile : MonoBehaviour
         // Possibly untarget others too
     }
 
-    void OnMouseDown()
+    HashSet<Unit> OnMouseDown()
     {
         Debug.Log("Clicked " + this.name);
         // confirm target selection
-        // ONLY AVAILABLE DURING SELECTION MODE
+        // ONLY AVAILABLE DURING TARGET MODE
+        if (battleManager.state == BattleState.TARGET)
+        {
+            return targeted;
+        }
+        return null;
     }
 
     void Target()
     {
         Debug.Log(this.name + " is targeted!");
         // Highlight tile
-        // Show Name + HP bar
+        // Add to targeted list
+        if (this.occupiedBy != null)
+        {
+            targeted.Add(this.occupiedBy);
+        }
     }
 
     void Untarget()
     {
         Debug.Log(this.name + " is no longer targeted!");
         // Remove highlight
-        // Remove name + hp bar
+        // Purge targeted list
+        targeted.Clear();
     }
 }

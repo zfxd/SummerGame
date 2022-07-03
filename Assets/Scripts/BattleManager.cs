@@ -4,13 +4,16 @@ using UnityEngine;
 //using System.Linq;        // wtf is this? Was included with iteration through children code...
 using Priority_Queue;
 
-public enum BattleState {START, TARGET, PLAYERTURN, ENEMYTURN, ENDTURN, WON, LOST};
+public enum BattleState {START, TARGET, PLAYERTURN, ENEMYTURN, ENDTURN, WON, LOST}; // Not sure if the last 3 will be needed
+public enum Action {START, ATK, SKILL, MOVE, END};
+public enum SelectionMode {SINGLE, ROW, COLUMN, ALL};
 
 public class BattleManager : MonoBehaviour
 {
     public BattleState state;
     public GameObject battleStations;
     public BattleUI battleUI;
+    public Action action;
 
     public List<Unit> allyUnits;
     public List<Unit> enemyUnits;
@@ -33,6 +36,7 @@ public class BattleManager : MonoBehaviour
         foreach (Transform tile in battleStations.transform)
         {
             BattleTile currTile = tile.gameObject.GetComponent<BattleTile>();
+            currTile.battleManager = this;
             if (currTile.occupiedBy == null)
                 continue;
             // maybe add animation here?
@@ -41,9 +45,8 @@ public class BattleManager : MonoBehaviour
                 allyUnits.Add(currUnit);
             else
                 enemyUnits.Add(currUnit);
-            // Add to turn order\
+            // Add to turn order
             turnOrder.Enqueue(currUnit, currUnit.unitSpd.value);
-            Debug.Log("Count " + turnOrder.Count);
         }
 
         // Initialize UI by giving it the list of units
@@ -73,16 +76,64 @@ public class BattleManager : MonoBehaviour
         // First move back to bottom of turnorder
         turnOrder.UpdatePriority(currUnit, 0);
         // Give them the turn
-        if (currUnit.unitAffl == affl.ALLY)
-            Debug.Log("Ally turn");
+        if (currUnit.unitAffl == affl.ALLY){
+            AllyTurn();
+        }
         else{
-            Debug.Log("Enemy turn");
+            EnemyTurn();
         }
 
         // hard 10 turn limit (move it to LoseCon area once ally and enemy turns are implemented)
         temp--;
         if (temp > 0)
             TurnManager();
+    }
+
+    void AllyTurn()
+    {
+        state = BattleState.PLAYERTURN;
+        Debug.Log("Ally Turn");
+        action = Action.START;
+        // Do stuff
+        Debug.Log("Select an action");
+        // attack, skill, move, end
+        switch(action)
+        {
+            case Action.ATK:
+                Debug.Log("Attack");
+                break;
+            case Action.SKILL:
+                Debug.Log("Skill");
+                break;
+            case Action.MOVE:
+                Debug.Log("Move");
+                break;
+            case Action.END:
+                Debug.Log("End");
+                break;
+        }
+
+        // All done
+        // Automatically exits into turnmanager
+    }
+
+
+    void EnemyTurn() // Maybe coroutine for this as well? Might not need it though cause it doesnt need to wait for input
+    {
+        state = BattleState.ENEMYTURN;
+        // Enemy does jack shit till we get AI implemented
+        // Maybe test some attacks
+        Debug.Log("Enemy Turn");
+        // Do stuff
+
+        // All done
+        // Automatically exits into turnmanager
+    }
+
+    public void SetAction(int set)
+    {
+        if (state == BattleState.PLAYERTURN)
+            action = (Action) set;
     }
 }
 
