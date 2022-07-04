@@ -6,18 +6,20 @@ using Priority_Queue;
 using Combat;
 
 public enum Action {START, ATK, SKILL, MOVE, END};
-public enum TargetMode {SINGLE, ROW, COLUMN, ALL};   // For AoE spells later maybe? Not currently used
+public enum TargetMode {NONE, SINGLE, ROW, COLUMN, ALL};   // For AoE spells later maybe? Not currently used
 
 public class BattleManager : StateMachine
 {
     public GameObject battleStations;
     public BattleUI battleUI;
     public Action action;
-    public Selection select;
 
     public List<Unit> allyUnits;
     public List<Unit> enemyUnits;
     public List<BattleTile> tiles;
+    public List<BattleTile> targeted;
+
+    public TargetMode targetMode;
 
     public SimplePriorityQueue<Unit> turnOrder = new SimplePriorityQueue<Unit>(new ReverseComparer<float>());
 
@@ -25,6 +27,7 @@ public class BattleManager : StateMachine
     void Start()
     {
         Debug.Log("Start");
+        targetMode = TargetMode.NONE;
         StartCoroutine(SetupBattle());
     }
 
@@ -50,9 +53,6 @@ public class BattleManager : StateMachine
             // Add to turn order
             turnOrder.Enqueue(currUnit, currUnit.unitSpd.value);
         }
-        // Load information into Selection class (handles all the target selection)
-        select.BattleManager = this;
-        select.Tiles = tiles;
         // Initialize UI by giving it the list of units
         battleUI.Init(allyUnits, enemyUnits);
 

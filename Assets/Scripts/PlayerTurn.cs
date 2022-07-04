@@ -27,7 +27,7 @@ namespace Combat
             {
                 case Action.ATK:
                     Debug.Log("Attack");
-                    Player.PlayerAttack();
+            // TODO: How do I call a coroutine from here?
                     break;
                 case Action.SKILL:
                     Debug.Log("Skill");
@@ -39,10 +39,38 @@ namespace Combat
                     Debug.Log("End");
                     break;
             }
-
-
             // Once done, return to TurnManager
+            // TODO: How do I check that I'm done?
             BattleManager.SetState(new TurnManager(BattleManager));
+        }
+
+        // Takes a targetMode
+        public IEnumerator PlayerAttack(TargetMode mode)
+        {
+            Debug.Log("Start attack coroutine");
+            yield return new WaitForSeconds(2f);
+            BattleManager.targetMode = mode;
+            bool valid = false;
+            while (!valid)
+            {
+                Debug.Log("Loop");
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                // Wait for click (no escape yet)
+                // Check if valid move
+                if (BattleManager.targeted.Count == 0)
+                {
+                    Debug.Log("Invalid selection. Clicked outside a box?");
+                    continue;
+                }
+                // If no units inside selection?
+                // Passed all the tests, it is valid
+                valid = true;
+            }
+            // cause all targeted targets to take damage
+
+            // Reset before we leave
+            BattleManager.targetMode = TargetMode.NONE;
+            yield break;
         }
     }
 }

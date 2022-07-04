@@ -32,6 +32,9 @@ public class Unit : MonoBehaviour
     public float        unitResource;
     public float        unitArmor;
     public float        unitShield;
+
+    // Skills and attack type?
+    public TargetMode basicAtk;
     
     // Constructor
     public Unit()
@@ -47,6 +50,7 @@ public class Unit : MonoBehaviour
         unitResource = unitResourceMax.value;
         unitArmor = 0;
         unitShield = 0;
+        basicAtk = TargetMode.SINGLE;
     }
 
     // Flat Damage or final result of %-based Damage
@@ -56,16 +60,4 @@ public class Unit : MonoBehaviour
         Debug.Log(unitName + " took " + dmg + " Damage");
     }
 
-    // Basic attack. Supports multi-grid attacks as well.
-    public IEnumerator PlayerAttack()
-    {
-        Selection select = GameObject.Find("Select").GetComponent<Selection>();
-        select.Target(TargetMode.SINGLE);
-        yield break;
-    }
-
-    public void EnemyAttack()
-    {
-        // idk if this needs to be a coroutine, maybe yes if we want to animate the decision making process
-    }
 }
