@@ -210,6 +210,18 @@ PrefabInstance:
       propertyPath: occupiedBy
       value: 
       objectReference: {fileID: 8429286351442138608, guid: edaebe74e92176240b75b22aa7bd11d4, type: 3}
+    - target: {fileID: 8376155696663609738, guid: ddd825feaaa3e494282ee253bef4d5ba, type: 3}
+      propertyPath: m_Color.b
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8376155696663609738, guid: ddd825feaaa3e494282ee253bef4d5ba, type: 3}
+      propertyPath: m_Color.g
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8376155696663609738, guid: ddd825feaaa3e494282ee253bef4d5ba, type: 3}
+      propertyPath: m_Color.r
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8376155697188373846, guid: ddd825feaaa3e494282ee253bef4d5ba, type: 3}
       propertyPath: occupiedBy
       value: 
@@ -1292,12 +1304,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33f3cb0183a79df419310f7c79e915e4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  state: 0
   battleStations: {fileID: 1947363198}
   battleUI: {fileID: 8582294184502096099}
   action: 0
   allyUnits: []
   enemyUnits: []
+  tiles: []
+  targeted: []
+  targetMode: 1
 --- !u!4 &1339158648
 Transform:
   m_ObjectHideFlags: 0

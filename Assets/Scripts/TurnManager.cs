@@ -28,13 +28,15 @@ namespace Combat
             // First move back to bottom of turnorder
             BattleManager.turnOrder.UpdatePriority(currUnit, 0);
             // Give them the turn
-            yield return new WaitForSeconds(2f);
             if (currUnit.unitAffl == affl.ALLY){
+                BattleManager.takingTurn = currUnit;
                 BattleManager.SetState(new PlayerTurn(BattleManager));
             }
             else{
+                BattleManager.takingTurn = currUnit;
                 BattleManager.SetState(new EnemyTurn(BattleManager));
             }
+            yield break;
         }
     }
 }

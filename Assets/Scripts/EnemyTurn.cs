@@ -5,6 +5,8 @@ namespace Combat
 {
     public class EnemyTurn : State
     {
+        Unit Enemy;
+
         public EnemyTurn(BattleManager battleManager) : base(battleManager)
         {
         }
