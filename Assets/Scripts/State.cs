@@ -16,5 +16,25 @@ namespace Combat
         {
             yield break;
         }
+
+        public virtual IEnumerator Attack()
+        {
+            yield break;
+        }
+
+        public virtual IEnumerator Skill()
+        {
+            yield break;
+        }
+
+        public virtual IEnumerator Move()
+        {
+            yield break;
+        }
+
+        public virtual IEnumerator End()
+        {
+            yield break;
+        }
     }
 }

@@ -7,9 +7,8 @@ namespace Combat
     {
         Unit Enemy;
 
-        public EnemyTurn(BattleManager battleManager, Unit enemy) : base(battleManager)
+        public EnemyTurn(BattleManager battleManager) : base(battleManager)
         {
-            Enemy = enemy;
         }
 
         public override IEnumerator Start()

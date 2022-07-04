@@ -16,6 +16,10 @@ public class Unit : MonoBehaviour
     public int      unitLevel;
     public affl     unitAffl;
     public Sprite   unitPortrait;
+    public int baseAction;                  // You can probably turn this into a unitStat idk
+    public int baseMove;
+    public int action;                      // Number of actions per turn, default 1
+    public int move;                        // Number of moves per turn, default 1
 
     // Damage Calculation Stats
     public UnitStat unitAtk;
@@ -39,6 +43,10 @@ public class Unit : MonoBehaviour
     // Constructor
     public Unit()
     {
+        baseAction = 1;
+        baseMove = 1;
+        action = 1;
+        move = 1;
         unitAffl = affl.ALLY;
         unitAtk = new UnitStat(100);
         unitDef = new UnitStat(100);
