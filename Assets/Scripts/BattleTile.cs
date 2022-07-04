@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// TODO: I'm 90% sure the targeting system isn't working correctly! Figure it out.
 public class BattleTile : MonoBehaviour
 {
     public Unit occupiedBy;
@@ -12,7 +11,6 @@ public class BattleTile : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
     }
 
     // Update is called once per frame
@@ -44,13 +42,16 @@ public class BattleTile : MonoBehaviour
         this.Untarget();
 
         // Possibly untarget others too
+
+        // purge targeted list
+        targeted.Clear();
     }
 
     HashSet<Unit> OnMouseDown()
     {
         Debug.Log("Clicked " + this.name);
         // confirm target selection
-        // ONLY AVAILABLE DURING TARGET MODE
+        // ONLY AVAILABLE DURING TARGET MODE?
         return targeted;
 
     }
@@ -59,6 +60,7 @@ public class BattleTile : MonoBehaviour
     {
         Debug.Log(this.name + " is targeted!");
         // Highlight tile
+        this.Highlight();
         // Add to targeted list
         if (this.occupiedBy != null)
         {
@@ -70,7 +72,18 @@ public class BattleTile : MonoBehaviour
     {
         Debug.Log(this.name + " is no longer targeted!");
         // Remove highlight
-        // Purge targeted list
-        targeted.Clear();
+        this.UnHighlight();
+    }
+
+    void Highlight()
+    {
+        // For easy changing of Highlight/Selection effect later on
+        this.GetComponent<SpriteRenderer>().color = Color.white;
+    }
+
+    void UnHighlight()
+    {
+        // Same as above
+        this.GetComponent<SpriteRenderer>().color = Color.black;
     }
 }
