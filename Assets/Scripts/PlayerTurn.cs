@@ -6,14 +6,19 @@ namespace Combat
 {
     public class PlayerTurn : State
     {
-        public PlayerTurn(BattleManager battleManager) : base(battleManager)
+        Unit Player;
+
+        public PlayerTurn(BattleManager battleManager, Unit player) : base(battleManager)
         {
+//            BattleManager = battleManager;  // Not sure if this is redundant
+                                            // Seemed usable even without it
+                                            // Possibly due to the default constructor? idk
+            Player = player;
         }
 
         public override IEnumerator Start()
         {
             Debug.Log("PlayerTurn");
-            // Do stuff
             BattleManager.action = Action.START;
             Debug.Log("Select an action");
             // do it here
@@ -22,6 +27,7 @@ namespace Combat
             {
                 case Action.ATK:
                     Debug.Log("Attack");
+                    Player.PlayerAttack();
                     break;
                 case Action.SKILL:
                     Debug.Log("Skill");
@@ -37,30 +43,6 @@ namespace Combat
 
             // Once done, return to TurnManager
             BattleManager.SetState(new TurnManager(BattleManager));
-        }
-
-        HashSet<Unit> PlayerTarget()
-        {
-            return null;
-        }
-
-        void PlayerAttack()
-        {
-        }
-
-        void PlayerSkill()
-        {
-
-        }
-
-        void PlayerMove()
-        {
-
-        }
-
-        void PlayerEnd()
-        {
-
         }
     }
 }

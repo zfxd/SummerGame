@@ -5,8 +5,11 @@ namespace Combat
 {
     public class EnemyTurn : State
     {
-        public EnemyTurn(BattleManager battleManager) : base(battleManager)
+        Unit Enemy;
+
+        public EnemyTurn(BattleManager battleManager, Unit enemy) : base(battleManager)
         {
+            Enemy = enemy;
         }
 
         public override IEnumerator Start()

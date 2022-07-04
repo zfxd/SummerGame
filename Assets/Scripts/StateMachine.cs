@@ -10,5 +10,10 @@ namespace Combat
             State = state;
             StartCoroutine(State.Start());
         }
+
+        public void ResumeState(State state)
+        {
+            State = state;
+        }
     }
 }

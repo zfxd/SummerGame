@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Combat;
 
 public enum affl {ALLY, ENEMY};
 public enum resource {None, Life, Mana, Rage, Ammo};
@@ -53,5 +54,18 @@ public class Unit : MonoBehaviour
     {
         unitLife -= dmg;
         Debug.Log(unitName + " took " + dmg + " Damage");
+    }
+
+    // Basic attack. Supports multi-grid attacks as well.
+    public IEnumerator PlayerAttack()
+    {
+        Selection select = GameObject.Find("Select").GetComponent<Selection>();
+        select.Target(TargetMode.SINGLE);
+        yield break;
+    }
+
+    public void EnemyAttack()
+    {
+        // idk if this needs to be a coroutine, maybe yes if we want to animate the decision making process
     }
 }

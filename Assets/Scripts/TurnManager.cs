@@ -30,10 +30,10 @@ namespace Combat
             // Give them the turn
             yield return new WaitForSeconds(2f);
             if (currUnit.unitAffl == affl.ALLY){
-                BattleManager.SetState(new PlayerTurn(BattleManager));
+                BattleManager.SetState(new PlayerTurn(BattleManager, currUnit));
             }
             else{
-                BattleManager.SetState(new EnemyTurn(BattleManager));
+                BattleManager.SetState(new EnemyTurn(BattleManager, currUnit));
             }
         }
     }

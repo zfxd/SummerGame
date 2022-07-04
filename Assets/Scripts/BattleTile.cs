@@ -7,8 +7,39 @@ public class BattleTile : MonoBehaviour
 {
     public Unit occupiedBy;
     public BattleManager battleManager;
-    HashSet<Unit> targeted = new HashSet<Unit>();
+    HashSet<BattleTile> targeted = new HashSet<BattleTile>();
 
+    /* // Do you need this too?
+    void Target()
+    {
+        Debug.Log(this.name + " is targeted!");
+        // Highlight tile
+        this.Highlight();
+        // Add to targeted list
+        targeted.Add(this);
+    }
+
+    void Untarget()
+    {
+        Debug.Log(this.name + " is no longer targeted!");
+        // Remove highlight
+        this.UnHighlight();
+    } */
+
+    void Highlight()
+    {
+        // For easy changing of Highlight/Selection effect later on
+        this.GetComponent<SpriteRenderer>().color = Color.red;
+    }
+
+    void UnHighlight()
+    {
+        // Same as above
+        this.GetComponent<SpriteRenderer>().color = Color.black;
+    }
+
+    
+    /* //Possibly obsolete
     // Start is called before the first frame update
     void Start()
     {
@@ -46,31 +77,13 @@ public class BattleTile : MonoBehaviour
         // Possibly untarget others too
     }
 
-    HashSet<Unit> OnMouseDown()
+    HashSet<BattleTile> OnMouseDown()
     {
         Debug.Log("Clicked " + this.name);
         // confirm target selection
-        // ONLY AVAILABLE DURING TARGET MODE
-        return targeted;
+        // ONLY AVAILABLE DURING TARGET MODE?
+        return targeted; // Check for whether or not any units were actually hit outside of code?
 
-    }
+    } */
 
-    void Target()
-    {
-        Debug.Log(this.name + " is targeted!");
-        // Highlight tile
-        // Add to targeted list
-        if (this.occupiedBy != null)
-        {
-            targeted.Add(this.occupiedBy);
-        }
-    }
-
-    void Untarget()
-    {
-        Debug.Log(this.name + " is no longer targeted!");
-        // Remove highlight
-        // Purge targeted list
-        targeted.Clear();
-    }
 }
