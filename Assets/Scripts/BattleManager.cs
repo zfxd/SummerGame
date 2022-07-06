@@ -3,26 +3,36 @@ using System.Collections.Generic;
 using UnityEngine;
 //using System.Linq;        // wtf is this? Was included with iteration through children code...
 using Priority_Queue;
+using Combat;
 
-public enum BattleState {START, TARGET, PLAYERTURN, ENEMYTURN, ENDTURN, WON, LOST};
+public enum Action {START, ATK, SKILL, MOVE, END};
+public enum TargetMode {NONE, SINGLE, ROW, COLUMN, ALL};   // For AoE spells later maybe? Not currently used
 
-public class BattleManager : MonoBehaviour
+public class BattleManager : StateMachine
 {
-    public BattleState state;
     public GameObject battleStations;
     public BattleUI battleUI;
+    public Action action;
 
+    // Important info for flow
     public List<Unit> allyUnits;
     public List<Unit> enemyUnits;
-    int temp = 10; // For now it runs for 10 turns because I don't want to stick Unity into an infinite loop
+    public List<BattleTile> tiles;
+    public List<BattleTile> targeted;   // Tiles currently targeted. Selection script under BattleTile.cs
+    public bool busy;                          // To stop coroutines from overlapping
+    public Unit takingTurn;            
+
+    public TargetMode targetMode;
 
     public SimplePriorityQueue<Unit> turnOrder = new SimplePriorityQueue<Unit>(new ReverseComparer<float>());
+
 
     // Start is called before the first frame update
     void Start()
     {
+        busy = false;
         Debug.Log("Start");
-        state = BattleState.START;
+        targetMode = TargetMode.NONE;
         StartCoroutine(SetupBattle());
     }
 
@@ -30,9 +40,15 @@ public class BattleManager : MonoBehaviour
     {
         Debug.Log("Setup");
         // For every tile, spawn its occupant
+        int x = 0;  // Systematically label each square as it's added to the List
         foreach (Transform tile in battleStations.transform)
         {
             BattleTile currTile = tile.gameObject.GetComponent<BattleTile>();
+            currTile.battleManager = this;
+            currTile.id = x;
+            x++;
+            // add to tiles
+            tiles.Add(currTile);
             if (currTile.occupiedBy == null)
                 continue;
             // maybe add animation here?
@@ -41,48 +57,50 @@ public class BattleManager : MonoBehaviour
                 allyUnits.Add(currUnit);
             else
                 enemyUnits.Add(currUnit);
-            // Add to turn order\
-            turnOrder.Enqueue(currUnit, currUnit.unitSpd.value);
-            Debug.Log("Count " + turnOrder.Count);
-        }
 
+            // Add to turn order
+            turnOrder.Enqueue(currUnit, currUnit.unitSpd.value);
+        }
         // Initialize UI by giving it the list of units
         battleUI.Init(allyUnits, enemyUnits);
+        Debug.Log("tiles size" + tiles.Count);
 
-        yield return new WaitForSeconds(2f);
-        TurnManager();
+        SetState(new TurnManager(this));
+        yield break;
     }
 
-    void TurnManager()
+    public void SetAction(int set)
     {
-        Debug.Log("TurnManager begin");
-        // Check for win/losecon
-        
-        // Check if anyone is above threshold
-        while(turnOrder.GetPriority(turnOrder.First) < 1000)
+//        Debug.Log("Setting action");
+        if (busy)
         {
-            // If no one, increment until someone is
-            foreach(Unit unit in turnOrder)
-            {
-                Debug.Log("No one yet");
-                turnOrder.UpdatePriority(unit, turnOrder.GetPriority(unit) + unit.unitSpd.value);
-            }
+            return; // No spamming!
         }
-
-        Unit currUnit = turnOrder.First;
-        // First move back to bottom of turnorder
-        turnOrder.UpdatePriority(currUnit, 0);
-        // Give them the turn
-        if (currUnit.unitAffl == affl.ALLY)
-            Debug.Log("Ally turn");
-        else{
-            Debug.Log("Enemy turn");
+        action = (Action) set;
+        switch(action)
+        {
+            case Action.ATK:
+                Debug.Log("Attack");
+                StartCoroutine(State.Attack());
+                SetState(new PlayerTurn(this));               // PlayerTurn state waits till everything is done
+                break;
+            case Action.SKILL:
+                Debug.Log("Skill");
+                StartCoroutine(State.Skill());
+                SetState(new PlayerTurn(this));
+                break;
+            case Action.MOVE:
+                Debug.Log("Move");
+                StartCoroutine(State.Move());                 // Not yet implemented
+                SetState(new PlayerTurn(this));
+                break;
+            case Action.END:
+                Debug.Log("End");
+                StartCoroutine(State.End());
+                // Does nothing rn
+                SetState(new PlayerTurn(this));
+                break;
         }
-
-        // hard 10 turn limit (move it to LoseCon area once ally and enemy turns are implemented)
-        temp--;
-        if (temp > 0)
-            TurnManager();
     }
 }
 
@@ -94,43 +112,3 @@ public class ReverseComparer<T> : IComparer<T> where T : System.IComparable<T>
         return -(obj1.CompareTo(obj2));
     }
 }
-
-
-/*
-    // Set up the objects to load. TODO how do we save and retrieve these?
-    public GameObject playerPrefab;
-    public GameObject enemyPrefab;
-
-    // TODO might need 1 for each of the 18 spots...
-    // TODO attacks affiliated with spots then?
-    public Transform playerBattleStation;
-    public Transform enemyBattleStation;
-
-    Unit playerUnit;
-    Unit enemyUnit;
-
-
-    IEnumerator PlayerAttack()
-    {
-        // Damage the enemy
-        enemyUnit.TakeDamage(playerUnit.atk);
-
-        yield return new WaitForSeconds(2f);
-
-        // Turn Management
-    }
-
-    void PlayerTurn()
-    {
-        Debug.Log("Player Turn");
-    }
-
-    public void OnAttackButton()
-    {
-        if (state != BattleState.PLAYERTURN)
-            return;
-        
-        StartCoroutine(PlayerAttack());
-    }
-
-*/
