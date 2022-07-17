@@ -53,6 +53,7 @@ public class BattleManager : StateMachine
                 continue;
             // maybe add animation here?
             Unit currUnit = Instantiate(currTile.occupiedBy, currTile.transform);
+            currTile.occupiedBy = currUnit;
             if (currUnit.unitAffl == affl.ALLY)
                 allyUnits.Add(currUnit);
             else
@@ -63,7 +64,6 @@ public class BattleManager : StateMachine
         }
         // Initialize UI by giving it the list of units
         battleUI.Init(allyUnits, enemyUnits);
-        Debug.Log("tiles size" + tiles.Count);
 
         SetState(new TurnManager(this));
         yield break;

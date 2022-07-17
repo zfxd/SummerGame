@@ -47,7 +47,6 @@ public class Unit : MonoBehaviour
         baseMove = 1;
         action = 1;
         move = 1;
-        unitAffl = affl.ALLY;
         unitAtk = new UnitStat(100);
         unitDef = new UnitStat(100);
         unitSpd = new UnitStat(100);
@@ -62,10 +61,27 @@ public class Unit : MonoBehaviour
     }
 
     // Flat Damage or final result of %-based Damage
-    public void TakeDamage(int dmg)
+    // returns whether or not unit died
+    public bool TakeDamage(int dmg)
     {
         unitLife -= dmg;
         Debug.Log(unitName + " took " + dmg + " Damage");
+
+        // Check if dead
+        if (unitLife <= 0)
+        {
+            Debug.Log(unitName + "ded");
+            Destroy(gameObject);
+            // Might need to remove from GameManager lists as necessary?
+            return true;
+        }
+        return false;
+    }
+
+    public void HealDamage(int heal)
+    {
+        unitLife += heal;
+        Debug.Log(unitName + " healed " + heal + " Damage");
     }
 
 }

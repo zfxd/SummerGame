@@ -62,24 +62,34 @@ namespace Combat
                     continue;
                 }
 
-                foreach(BattleTile tile in BattleManager.targeted)                  // Possibly move this out into a Skill.Validate() fn
-                                                                                    // Check that selection makes sense for this skill
-                                                                                    // For basic attack this checks that there is 1. a unit
-                                                                                    // and 2. it is an enemy (I gave every tile an ID)
-                                                                                    // 0-8 is ally 9-17 is enemy. ID corresponds to index
-                                                                                    // in the List of tiles.
-                {
-                    if(tile.occupiedBy != null && tile.id > 8)
-                    {
-                        // at least 1 ENEMY target hit
-                        valid = true;
-                    }
-                }
+                valid = Validate.CheckForEnemy(BattleManager.targeted);             // see Selection.cs Validate class
+
                 if (!valid)
                     Debug.Log("No ENEMY targets within selection");
             }
             // cause all targeted targets to take damage
-            Debug.Log("Boom damage");
+            bool killed = false;
+            foreach (BattleTile tile in BattleManager.targeted)
+            {
+                Unit toHit = tile.occupiedBy;
+                if (toHit != null)
+                {
+                    killed = toHit.TakeDamage((int)BattleManager.takingTurn.unitAtk.value);
+                }
+                if (killed)
+                {
+                    // Remove from BattleManager lists
+                    BattleManager.enemyUnits.Remove(toHit);
+                    BattleManager.turnOrder.Remove(toHit);
+                    // if That was the last enemy, straight to win con
+                    if (BattleManager.enemyUnits.Count == 0)
+                    {
+                        BattleManager.SetState(new Win(BattleManager));
+                        yield break;
+                    }
+                    killed = false;
+                }
+            }
 
             // Action has been taken!
             BattleManager.takingTurn.action--;

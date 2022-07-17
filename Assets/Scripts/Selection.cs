@@ -6,6 +6,7 @@ namespace Combat
 {
     // helper methods that take an ID (that the mouse is over) and return the IDs to target depending
     // on selection mode
+    // Used in BattleTile.cs
     public static class Selection
     {
         static List<int>[] Rows = {new List<int>{0,3,6}, new List<int>{1,4,7}, new List<int>{2,5,8},
@@ -57,6 +58,44 @@ namespace Combat
         }
 
         // Overlapping targeting areas gonna get wacky :D        
+    }
+
+    // Helper methods to validate that target selections make sense
+    // Used in PlayerTurn.cs
+    public static class Validate
+    {
+        /**
+         *Given a list of targeted BattleTiles, check that at least one enemy is present
+         * Uses ID 
+        **/
+        public static bool CheckForEnemy(List<BattleTile> tiles)
+        {
+            foreach(BattleTile tile in tiles)
+            {
+                // at least 1 ENEMY target hit
+                if (tile.occupiedBy != null && tile.id > 8)
+                {
+                    return true;
+                }
+            }
+            // If not, invalid
+            return false;
+        }
+
+        public static bool CheckForAlly(List<BattleTile> tiles)
+        {
+            foreach(BattleTile tile in tiles)
+            {
+                // at least 1 ALLY target hit
+                if (tile.occupiedBy != null && tile.id < 9)
+                {
+                    return true;
+                }
+            }
+            // If not, invalid
+            return false;
+        }
+
     }
 
 }       
