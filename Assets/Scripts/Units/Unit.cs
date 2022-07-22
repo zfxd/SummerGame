@@ -39,6 +39,11 @@ public class Unit : MonoBehaviour
 
     // Skills and attack type?
     public TargetMode basicAtk;
+    [SerializeField] Skill skill0;  // Basic atk
+    [SerializeField] Skill skill1;
+    [SerializeField] Skill skill2;
+    [SerializeField] Skill skill3;
+    [SerializeField] Skill skill4;
     
     // Constructor
     public Unit()
