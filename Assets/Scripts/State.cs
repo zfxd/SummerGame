@@ -22,7 +22,22 @@ namespace Combat
             yield break;
         }
 
-        public virtual IEnumerator Skill()
+        public virtual IEnumerator Skill1()
+        {
+            yield break;
+        }
+        
+        public virtual IEnumerator Skill2()
+        {
+            yield break;
+        }
+
+        public virtual IEnumerator Skill3()
+        {
+            yield break;
+        }
+    
+        public virtual IEnumerator Skill4()
         {
             yield break;
         }

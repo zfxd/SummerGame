@@ -5,7 +5,7 @@ using UnityEngine;
 using Priority_Queue;
 using Combat;
 
-public enum Action {START, ATK, SKILL, MOVE, END};
+public enum Action {START, ATK, SKILL1, SKILL2, SKILL3, SKILL4, MOVE, END};
 public enum TargetMode {NONE, SINGLE, ROW, COLUMN, ALL};   // For AoE spells later maybe? Not currently used
 
 public class BattleManager : StateMachine
@@ -84,9 +84,24 @@ public class BattleManager : StateMachine
                 StartCoroutine(State.Attack());
                 SetState(new PlayerTurn(this));               // PlayerTurn state waits till everything is done
                 break;
-            case Action.SKILL:
-                Debug.Log("Skill");
-                StartCoroutine(State.Skill());
+            case Action.SKILL1:
+                Debug.Log("Skill1");
+                StartCoroutine(State.Skill1());
+                SetState(new PlayerTurn(this));
+                break;
+            case Action.SKILL2:
+                Debug.Log("Skill2");
+                StartCoroutine(State.Skill2());
+                SetState(new PlayerTurn(this));
+                break;
+            case Action.SKILL3:
+                Debug.Log("Skill3");
+                StartCoroutine(State.Skill3());
+                SetState(new PlayerTurn(this));
+                break;
+            case Action.SKILL4:
+                Debug.Log("Skill4");
+                StartCoroutine(State.Skill4());
                 SetState(new PlayerTurn(this));
                 break;
             case Action.MOVE:

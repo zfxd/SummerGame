@@ -99,7 +99,7 @@ namespace Combat
             BattleManager.busy = false;
         }
 
-        public override IEnumerator Skill()
+        public override IEnumerator Skill1()
         {
             // Check if able to take action
             if (BattleManager.takingTurn.action == 0)
@@ -122,6 +122,22 @@ namespace Combat
             BattleManager.takingTurn.action--;
             BattleManager.targetMode = TargetMode.NONE;
             BattleManager.busy = false;
+            yield break;
+        }
+
+        public override IEnumerator Skill2()
+        {
+            yield break;
+        }
+
+        public override IEnumerator Skill3()
+        {
+            yield break;
+        }
+
+        public override IEnumerator Skill4()
+        {
+            yield break;
         }
         
         public override IEnumerator Move()
