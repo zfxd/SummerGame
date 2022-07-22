@@ -96,6 +96,20 @@ namespace Combat
             return false;
         }
 
+        public static bool CheckForAllyMove(List<BattleTile> tiles)
+        {
+            foreach(BattleTile tile in tiles)
+            {
+                // ALL tiles need to be unoccupied. (This allows for units that take up multiple tiles!)
+                // But none are implemented yet
+                if (tile.occupiedBy != null || tile.id > 8)
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
     }
 
 }       

@@ -67,7 +67,8 @@ namespace Combat
                 if (!valid)
                     Debug.Log("No ENEMY targets within selection");
             }
-            // cause all targeted targets to take damage
+            
+            // SKILL BEHAVIOR - I WANT TO MOVE THIS OUT OF PLAYERTURN
             bool killed = false;
             foreach (BattleTile tile in BattleManager.targeted)
             {
@@ -134,8 +135,43 @@ namespace Combat
                 yield break;
             }
 
+            // Select a tile to move to
+            BattleManager.targetMode = TargetMode.SINGLE;
+            bool valid = false;
+            while (!valid)
+            {
+                Debug.Log("Loop");
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));      // "targeted" list updates in real time
+                // Wait for click
+                // Check if valid move
+                if (BattleManager.targeted.Count == 0)                              // Once clicked, check that targets make sense
+                                                                                    // First, check that any boxes are even selected
+                {
+                    Debug.Log("Invalid selection. Clicked outside a box?");
+                    continue;
+                }
+
+                valid = Validate.CheckForAllyMove(BattleManager.targeted);             // see Selection.cs Validate class
+
+                if (!valid)
+                    Debug.Log("Either targeted an enemy square or an occupied square");
+            }
+
+            // TODO: Move code
+            // Let's not think about units that take up multiple squares for now
+            // Single tile destination
+            BattleTile dest = BattleManager.targeted[0]; // Assumes only one tile targeted
+            BattleTile curr = BattleManager.takingTurn.transform.parent.gameObject.GetComponent<BattleTile>();
+            // Only changes location in scene. Does not change the hierarchy in any way
+            BattleManager.takingTurn.transform.SetParent(dest.transform, false);
+            // This should change the hierarchy!
+            dest.occupiedBy = BattleManager.takingTurn;
+            curr.occupiedBy = null;
+
+
             // Reset values
             BattleManager.takingTurn.move--;
+            BattleManager.targetMode = TargetMode.NONE;
             BattleManager.busy = false;
             yield break;
         }
