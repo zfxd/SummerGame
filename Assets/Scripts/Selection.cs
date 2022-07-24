@@ -64,50 +64,46 @@ namespace Combat
     // Used in PlayerTurn.cs
     public static class Validate
     {
-        /**
-         *Given a list of targeted BattleTiles, check that at least one enemy is present
-         * Uses ID 
-        **/
-        public static bool CheckForEnemy(List<BattleTile> tiles)
+        /** Check if only enemy BattleTiles are selected
+         */
+        public static bool IsEnemy(List<BattleTile> tiles)
         {
-            foreach(BattleTile tile in tiles)
+            foreach (BattleTile tile in tiles)
             {
-                // at least 1 ENEMY target hit
-                if (tile.occupiedBy != null && tile.id > 8)
+                if (tile.id < 9)
                 {
-                    return true;
-                }
-            }
-            // If not, invalid
-            return false;
-        }
-
-        public static bool CheckForAlly(List<BattleTile> tiles)
-        {
-            foreach(BattleTile tile in tiles)
-            {
-                // at least 1 ALLY target hit
-                if (tile.occupiedBy != null && tile.id < 9)
-                {
-                    return true;
-                }
-            }
-            // If not, invalid
-            return false;
-        }
-
-        public static bool CheckForAllyMove(List<BattleTile> tiles)
-        {
-            foreach(BattleTile tile in tiles)
-            {
-                // ALL tiles need to be unoccupied. (This allows for units that take up multiple tiles!)
-                // But none are implemented yet
-                if (tile.occupiedBy != null || tile.id > 8)
-                {
-                    return false;
+                    return false;   // An ally tile is selected
                 }
             }
             return true;
+        }
+
+        public static bool IsAlly(List<BattleTile> tiles)
+        {
+            foreach (BattleTile tile in tiles)
+            {
+                if (tile.id > 8)
+                {
+                    return false;   // An enemy tile is selected
+                }
+            }
+            return true;
+        }
+
+        /**
+         * Check if at least one unit is targeted.
+         * Often used in conjunction with CheckForEnemy and CheckForAlly
+         */
+        public static bool IsOccupied(List<BattleTile> tiles)
+        {
+            foreach (BattleTile tile in tiles)
+            {
+                if (tile.occupiedBy != null)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
     }

@@ -38,12 +38,11 @@ public class Unit : MonoBehaviour
     public float        unitShield;
 
     // Skills and attack type?
-    public TargetMode basicAtk;
-    [SerializeField] Skill skill0;  // Basic atk
-    [SerializeField] Skill skill1;
-    [SerializeField] Skill skill2;
-    [SerializeField] Skill skill3;
-    [SerializeField] Skill skill4;
+    [SerializeField] public Skill skill0;  // Basic atk
+    [SerializeField] public Skill skill1;
+    [SerializeField] public Skill skill2;
+    [SerializeField] public Skill skill3;
+    [SerializeField] public Skill skill4;
     
     // Constructor
     public Unit()
@@ -62,7 +61,6 @@ public class Unit : MonoBehaviour
         unitResource = unitResourceMax.value;
         unitArmor = 0;
         unitShield = 0;
-        basicAtk = TargetMode.SINGLE;
     }
 
     // Flat Damage or final result of %-based Damage

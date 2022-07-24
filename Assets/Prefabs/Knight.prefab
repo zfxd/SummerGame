@@ -143,3 +143,8 @@ MonoBehaviour:
   unitArmor: 0
   unitShield: 0
   basicAtk: 1
+  skill0: {fileID: 0}
+  skill1: {fileID: 11400000, guid: cf05dc543cc6ba24c8d6002e13143f9a, type: 2}
+  skill2: {fileID: 0}
+  skill3: {fileID: 0}
+  skill4: {fileID: 0}

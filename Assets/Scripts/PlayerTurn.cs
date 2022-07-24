@@ -16,12 +16,20 @@ namespace Combat
             // Don't do anything if another coroutine is still busy
             yield return new WaitUntil(() => !BattleManager.busy);
 
+            // Check if GAME is over
+            if (BattleManager.enemyUnits.Count == 0)
+            {
+                BattleManager.SetState(new Win(BattleManager));
+                yield break;
+            }
+            
             // Check if turn is over
             if (BattleManager.takingTurn.move == 0 && BattleManager.takingTurn.action == 0)
             {
                 // reset values for next turn and return to TurnManager state
                 BattleManager.takingTurn.move = BattleManager.takingTurn.baseMove;
                 BattleManager.takingTurn.action = BattleManager.takingTurn.baseAction;
+                EndTurn();
                 BattleManager.SetState(new TurnManager(BattleManager));
                 yield break;
             }
@@ -31,72 +39,51 @@ namespace Combat
             yield return new WaitUntil(() => BattleManager.action != Action.START);
             // SetAction method will call relevant coroutines and reset to PlayerTurn state
         }
-
-        // Takes a targetMode
         public override IEnumerator Attack()
         {
             Debug.Log("Start attack coroutine");
-            // Check if able to make an attack action rn
+            // Check if able to take action
             if (BattleManager.takingTurn.action == 0)
             {
                 Debug.Log("No more actions");
                 yield break;
             }
             BattleManager.busy = true;
-            BattleManager.targetMode = BattleManager.takingTurn.basicAtk;           // Set target mode
 
+            // TODO skill code
+            Skill skill = BattleManager.takingTurn.skill0;
+
+            // Check cooldown
+
+            // Set selection mode by reading from skill
+            BattleManager.targetMode = skill.targetMode;
+
+            // Then handle selection code here
             bool valid = false;
             while (!valid)
             {
                 Debug.Log("Loop");
-                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));      // "targeted" list updates in real time
-                                                                                    // See BattleTile.cs
-                                                                            // Basically it'll pull from BattleManager.targetMode
-                                                                            // To determine which tiles to add to "targeted"
-                // Wait for click (no escape yet)
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                // Possibly implement using escape to break out of loop TODO
                 // Check if valid move
-                if (BattleManager.targeted.Count == 0)                              // Once clicked, check that targets make sense
-                                                                                    // First, check that any boxes are even selected
+                if (BattleManager.targeted.Count == 0)
                 {
                     Debug.Log("Invalid selection. Clicked outside a box?");
                     continue;
                 }
-
-                valid = Validate.CheckForEnemy(BattleManager.targeted);             // see Selection.cs Validate class
-
+            // Then use a .Validate() function from skill to check that the targets selected was valid
+                valid = skill.IsValid(BattleManager.targeted);
                 if (!valid)
-                    Debug.Log("No ENEMY targets within selection");
-            }
-            
-            // SKILL BEHAVIOR - I WANT TO MOVE THIS OUT OF PLAYERTURN
-            bool killed = false;
-            foreach (BattleTile tile in BattleManager.targeted)
-            {
-                Unit toHit = tile.occupiedBy;
-                if (toHit != null)
                 {
-                    killed = toHit.TakeDamage((int)BattleManager.takingTurn.unitAtk.value);
-                }
-                if (killed)
-                {
-                    // Remove from BattleManager lists
-                    BattleManager.enemyUnits.Remove(toHit);
-                    BattleManager.turnOrder.Remove(toHit);
-                    // if That was the last enemy, straight to win con
-                    if (BattleManager.enemyUnits.Count == 0)
-                    {
-                        BattleManager.SetState(new Win(BattleManager));
-                        yield break;
-                    }
-                    killed = false;
+                    Debug.Log("Invalid selection for " + skill.skillName);
                 }
             }
+            // The actual skill effect (damage, heal, etc) handled by calling a Skill.Activate()
+            skill.Activate(BattleManager);
 
-            // Action has been taken!
             BattleManager.takingTurn.action--;
-            // Reset targetMode before we leave
             BattleManager.targetMode = TargetMode.NONE;
-            BattleManager.busy = false;
+            yield break;
         }
 
         public override IEnumerator Skill1()
@@ -107,21 +94,42 @@ namespace Combat
                 Debug.Log("No more actions");
                 yield break;
             }
+            yield break; // Temporary before implementing skills
             BattleManager.busy = true;
 
             // TODO skill code
+            Skill skill = BattleManager.takingTurn.skill1;
 
-            // Probably set selection mode by reading from skill
+            // Check cooldown
+
+            // Set selection mode by reading from skill
+            BattleManager.targetMode = skill.targetMode;
 
             // Then handle selection code here
-
+            bool valid = false;
+            while (!valid)
+            {
+                Debug.Log("Loop");
+                yield return new WaitUntil(() => Input.GetMouseButtonDown(0));
+                // Possibly implement using escape to break out of loop
+                // Check if valid move
+                if (BattleManager.targeted.Count == 0)
+                {
+                    Debug.Log("Invalid selection. Clicked outside a box?");
+                    continue;
+                }
             // Then use a .Validate() function from skill to check that the targets selected was valid
-
-            // The actual skill effect (damage, heal, etc) handled by calling a Skill.Function() too maybe?
+                valid = skill.IsValid(BattleManager.targeted);
+                if (!valid)
+                {
+                    Debug.Log("Invalid selection for " + skill.skillName);
+                }
+            }
+            // The actual skill effect (damage, heal, etc) handled by calling a Skill.Activate()
+            skill.Activate(BattleManager);
 
             BattleManager.takingTurn.action--;
             BattleManager.targetMode = TargetMode.NONE;
-            BattleManager.busy = false;
             yield break;
         }
 
@@ -142,14 +150,13 @@ namespace Combat
         
         public override IEnumerator Move()
         {
-            // TODO move code
-            BattleManager.busy = true;
             // Check if able to move
             if (BattleManager.takingTurn.move == 0)
             {
                 Debug.Log("No more moves");
                 yield break;
             }
+            BattleManager.busy = true;
 
             // Select a tile to move to
             BattleManager.targetMode = TargetMode.SINGLE;
@@ -167,7 +174,7 @@ namespace Combat
                     continue;
                 }
 
-                valid = Validate.CheckForAllyMove(BattleManager.targeted);             // see Selection.cs Validate class
+                valid = Validate.IsAlly(BattleManager.targeted) && !Validate.IsOccupied(BattleManager.targeted);
 
                 if (!valid)
                     Debug.Log("Either targeted an enemy square or an occupied square");
@@ -204,6 +211,15 @@ namespace Combat
             BattleManager.busy = false;
             Debug.Log("Turn skipped");
             yield break;
+        }
+        
+        /**
+         * Actions to take when ending a turn.
+         * Decrement cooldown etc...
+         */
+        void EndTurn()
+        {
+
         }
     }
 }

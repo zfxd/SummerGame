@@ -123,6 +123,10 @@ MonoBehaviour:
   unitLevel: 1
   unitAffl: 0
   unitPortrait: {fileID: 0}
+  baseAction: 1
+  baseMove: 1
+  action: 1
+  move: 1
   unitAtk:
     baseValue: 100
   unitDef:
@@ -138,3 +142,9 @@ MonoBehaviour:
   unitResource: 100
   unitArmor: 0
   unitShield: 0
+  basicAtk: 1
+  skill0: {fileID: 11400000, guid: 8ad3e313a0940dc42964483d27b36e8b, type: 2}
+  skill1: {fileID: 0}
+  skill2: {fileID: 0}
+  skill3: {fileID: 0}
+  skill4: {fileID: 0}
